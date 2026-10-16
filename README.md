@@ -1,10 +1,10 @@
 # Taller MySQL - Universidad
 
-## Problema
+## PLANTEAMIENTO
 
 Una universidad está digitalizando su sistema de gestión de asignaturas, docentes y horarios. Actualmente, la información está registrada en una única tablas, perdo ha generado redundancias y dificultades para mantener los datos actualizados. Se necesita normalizar la Base de Datos para que sea más eficiente y evitar la redundancia de datos.
 
-## Normalización
+## NORMALIZACIÓN
 
 ### Primera Forma Normal (1FN)
 
@@ -28,8 +28,12 @@ El objetivo principal de la 2FN es eliminar la dependencia parcial que ocurre cu
 Para que esta estructura cumpla con los criterios de la 2FN se aplicaron las siguientes acciones:
 
 > * Se separa la información personal de los estudiantes en la Tabla *ESTUDIANTES*, donde el atributo _Nombre_Estudiante_ depende únicamente su identificador único (_Estudiante_ID_). Con esto se evita que el nombre del estudiante se repita por cada curso en el que está inscrito.
-> * Lso atributos descriptivos del curso (_Curso_, _Aula_, _Horario_) se agruparon en la tabla *CURSOS*, donde dependen directamente de la clave _Curso_ID_.
+>
+> * Se define la Tabla *CURSOS* para almacenar de forma única el nombre de las asignaturas impartidas.
+>
 > * La relación que existe entre la Tabla *ESTUDIANTES* y *CURSOS* es de muchos a muchos (ya que un Estudiante puede estar inscrito en muchos Cursos y un Curso puede tener muchos estudiantes), por lo que genera redundancia en los datos se crea la Tabla *MATRICULA* que asegura que las relaciones se administren de forma eficiente sin dependencias parciales.
+>
+> * Se extraen los datos de profesores, aulas y horarios de cursos (*DOCENTES*, *AULAS*, *HORARIOS*) para evitar repetir estos datos en múltiples registros.
 > * Se extraen los datos de los profesores a una Tabla *DOCENTES*  para evitar repetir los nombre de los profesores en múltiples registros.
 
 ______
@@ -42,4 +46,9 @@ El objetivo principal de la 3FN Ees eliminar la dependencias transitivas, lo que
 
 La estructura de la Base de Datos cumple con esta característica ya que:
 
-> * Se consolida la Tabla *DOCENTES* y se vincula a la Tabla *CURSOS* utilizando _ID_Docente_ como llave foránea.
+> * Se desacoplan de la Tabla *CURSOS* datos que pueden resultar redundantes y se transforman en relaciones estrictas a traves de llaves foráneas.
+>
+>   * ID_Aula: Asigna a cada curso con su ubicación en la Tabla *AULAS*.
+>   * ID_Horario: Asigna al curso un bloque temporal en la tabla.
+>   * ID_Docente: Asigna a cada curso con un profesor registrado en la Tabla *DOCENTES*.
+> * Con esta estructura se evitan anomalías de actualización, borrado o inserción.
